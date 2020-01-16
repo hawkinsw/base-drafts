@@ -379,6 +379,9 @@ An HTTP message (request or response) consists of:
 3. optionally, trailing headers, if present (see {{!RFC7230}}, Section 4.1.2),
    sent as a single HEADERS frame.
 
+Receipt of DATA and HEADERS frames in any other sequence MUST be treated as a
+connection error of type H3_FRAME_UNEXPECTED ({{errors}}).
+
 A server MAY send one or more PUSH_PROMISE (see {{frame-push-promise}}) or
 DUPLICATE_PUSH (see {{frame-duplicate-push}}) frames before, after, or
 interleaved with the frames of a response message. These PUSH_PROMISE and
@@ -610,9 +613,9 @@ permitted (e.g., idempotent actions like GET, PUT, or DELETE).
 ### Malformed Requests and Responses {#malformed}
 
 A malformed request or response is one that is an otherwise valid sequence of
-frames but is invalid due to the presence of extraneous frames, prohibited
-header fields, the absence of mandatory header fields, or the inclusion of
-uppercase header field names.
+frames but is invalid due to the presence of prohibited header fields, the
+absence of mandatory header fields, or the inclusion of uppercase header field
+names.
 
 A request or response that includes a payload body can include a
 `content-length` header field.  A request or response is also malformed if the
